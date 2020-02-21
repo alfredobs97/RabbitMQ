@@ -1,0 +1,4 @@
+comando para ver colas y mensajes pendientes:
+watch rabbitmqctl list_queues
+
+Para manejar la creación de llaves se podría usar promesas pero no bloquearían el hilo para probar como los mensajes van llegando poco a pocos
