@@ -37,3 +37,6 @@ Debe haber 3 servidores NodeJS + 1 rabbitMQ funcionando, uno de ellos servidor w
 ```
 $ docker-compose up
 ```
+
+Por falta de comprobación si rabbitMQ está activo los contenedores que se connectan deben reiniciarse hasta que esté activo
+
