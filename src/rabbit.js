@@ -6,7 +6,6 @@ const queueKeyBack = 'keyBack';
 module.exports = {
   start: start,
   sendKey: sendKey,
-  sendKeyBack: sendKeyBack,
   sendEmail: sendEmail
 };
 
@@ -14,7 +13,7 @@ async function start() {
   const server = await createConnection('amqp://rabbitmq:rabbitmq@localhost');
   const channel = await createChannel(server);
 
-  // crear las tres colas al arrancar porque si no va a petar cuando empiecen a escuchar por estas colas
+  // crear las colas al arrancar porque si no va a petar cuando empiecen a escuchar por estas colas
   channel.assertQueue(queueKeyBack, {
     durable: true
   });
@@ -52,26 +51,9 @@ function sendKey(channel, keyData) {
   return channel.sendToQueue(queueKey, Buffer.from(JSON.stringify(keyData)));
 }
 
-function sendKeyBack(channel, keys) {
-  return channel.sendToQueue(queueKeyBack, Buffer.from(JSON.stringify(keys)));
-}
-
 function sendEmail(channel, emailData) {
   return channel.sendToQueue(
     queueEmail,
     Buffer.from(JSON.stringify(emailData))
   );
 }
-
-/* amqp.connect('amqp://rabbitmq:rabbitmq@localhost', function(
-  error0,
-  connection
-) {
-  if (error0) {
-    throw error0;
-  }
-  connection.createChannel(function(error1, channel) {
-    channel.sendToQueue('cola1', Buffer.from('Hola mundo'));
-  });
-});
- */
