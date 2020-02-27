@@ -33,24 +33,26 @@ function generateKey(type) {
   });
 }
 
+// Funcion de prueba
+async function generateKey2(type) {
+  await new Promise(r => setTimeout(r, 5000));
+  return 'keysGeneradas con tipo ' + type;
+}
+
 rabbit
   .start()
   .then(channel => {
     console.log('Connected');
-    channel.consume(
-      queueKey,
-      async msg => {
-        let configurationKey = JSON.parse(msg.content);
-        console.log(' [x] Received %s', msg.content.toString());
+    channel.consume(queueKey, async msg => {
+      let configurationKey = JSON.parse(msg.content);
+      console.log(' [x] Received %s', msg.content.toString());
 
+      const keys = await generateKey2(configurationKey.type);
+      rabbit.sendKeyBack(channel, keys);
 
-        const keys = await generateKey(configurationKey.type);
-        rabbit.sendKeyBack(channel, keys);
-
-        //confirma que se ha generado la clave y la elimina de la cola
-        channel.ack(msg);
-        console.log(keys);
-      },
-    );
+      //confirma que se ha generado la clave y la elimina de la cola
+      channel.ack(msg);
+      console.log(keys);
+    });
   })
   .catch(err => console.log(err));
