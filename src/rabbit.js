@@ -10,7 +10,7 @@ module.exports = {
 };
 
 async function start() {
-  const server = await createConnection('amqp://rabbitmq:rabbitmq@localhost');
+  const server = await createConnection('amqp://rabbitmq:rabbitmq@rabbitmq');
   const channel = await createChannel(server);
 
   // crear las colas al arrancar porque si no va a petar cuando empiecen a escuchar por estas colas

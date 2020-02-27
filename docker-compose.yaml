@@ -13,4 +13,38 @@ services:
       - '5672:5672'
       # HTTP management UI
       - '15672:15672'
+
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+  webserver:
+    links:
+      - rabbitmq
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-web
+    ports:
+      # Endpoint
+      - '8080:8080'
+  
+  generatekey:
+    links:
+      - rabbitmq
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-key
+  
+  sendemail:
+    links:
+      - rabbitmq
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-email
+        
     

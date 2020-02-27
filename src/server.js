@@ -19,7 +19,7 @@ const getStartRabbit = async () => {
         res.sendStatus(200);
       });
 
-      app.listen(3000, () => console.log('listen'));
+      app.listen(8080, () => console.log('listen'));
     })
     .catch(err => console.log(err));
 };
