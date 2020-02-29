@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
 const rabbit = require('./rabbit');
-const cors = require('cors')
+const cors = require('cors');
 
 app.use(express.json());
+
 app.use(cors());
 
 const getStartRabbit = async () => {

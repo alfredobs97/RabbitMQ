@@ -34,13 +34,15 @@
           <div id="main-form" class="main-form">
             <div class="group">
               <div class="form-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="encType"
-                  name="encType"
-                  placeholder="Encryption Type (rsa)"
-                />
+                <select class="form-control" id="encType" name="encType">
+                  <option value="" disabled selected hidden
+                    >Encryption Type</option
+                  >
+                  <option value="rsa">rsa</option>
+                  <option value="dsa">dsa</option>
+                  <option value="ec">ec</option>
+                  <option value="ed25519">ed25519</option>
+                </select>
               </div>
               <div class="form-group">
                 <input
