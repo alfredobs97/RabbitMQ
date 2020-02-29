@@ -4,6 +4,17 @@ const rabbit = require('./rabbit');
 
 app.use(express.json());
 
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+
+  next();
+});
+
 const getStartRabbit = async () => {
   rabbit
     .start()
@@ -15,6 +26,7 @@ const getStartRabbit = async () => {
       });
 
       app.post('/createKey', (req, res) => {
+        console.log('Received a request with ', req.body);
         rabbit.sendKey(channel, req.body);
         res.sendStatus(200);
       });

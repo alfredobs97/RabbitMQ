@@ -1,3 +1,3 @@
-// Añadir el envio del correo del usuario al body del envio POST
+// Crear una vista en un directorio Dist la cual haga peticiones al servidor y por ultimo muestre un mensaje al usuario
 
-// Añadir funcionalidad para enviar correos al usuario al crear la clave, hacer uso de nodemailer
+// Hacer la documentacion de todo el proyecto
