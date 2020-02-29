@@ -34,13 +34,15 @@
           <div id="main-form" class="main-form">
             <div class="group">
               <div class="form-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="encType"
-                  name="encType"
-                  placeholder="Encryption Type (rsa)"
-                />
+                <select class="form-control" id="encType" name="encType">
+                  <option value="" disabled selected hidden
+                    >Encryption Type</option
+                  >
+                  <option value="rsa">rsa</option>
+                  <option value="dsa">dsa</option>
+                  <option value="ec">ec</option>
+                  <option value="ed25519">ed25519</option>
+                </select>
               </div>
               <div class="form-group">
                 <input
@@ -71,13 +73,12 @@
 
       console.log('You will make a server request with the body: ', postBody);
 
-      $.post(
-        'http://localhost:3000/createKey',
-        JSON.stringify(postBody),
-        function(data, status) {
-          console.log(`${data} and status is ${status}`);
-        }
-      );
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/createKey',
+        contentType: 'application/json',
+        data: JSON.stringify(postBody)
+      });
 
       showMessage();
     });
