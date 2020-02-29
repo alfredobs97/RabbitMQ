@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <title>Key Generator</title>
+    <meta charset="utf-8" />
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <!-- All the files that are required -->
+    <link
+      rel="stylesheet"
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Varela+Round"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="./assets/style.css" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  </head>
+  <body>
+    <div class="text-center" style="padding:50px 0">
+      <div class="logo">Key Generator</div>
+      <!-- Main Form -->
+      <div class="form">
+        <div id="form" class="text-left">
+          <div id="form-main-message" class="form-main-message"></div>
+          <div id="main-form" class="main-form">
+            <div class="group">
+              <div class="form-group">
+                <select class="form-control" id="encType" name="encType">
+                  <option value="" disabled selected hidden
+                    >Encryption Type</option
+                  >
+                  <option value="rsa">rsa</option>
+                  <option value="dsa">dsa</option>
+                  <option value="ec">ec</option>
+                  <option value="ed25519">ed25519</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="userEmail"
+                  name="userEmail"
+                  placeholder="Your Email"
+                />
+              </div>
+            </div>
+            <input type="button" id="button" class="button" value="Send" />
+          </div>
+        </div>
+      </div>
+      <!-- end:Main Form -->
+    </div>
+  </body>
+  <script>
+    $('#button').click(() => {
+      let encType = $('#encType').val();
+      let userEmail = $('#userEmail').val();
+
+      let postBody = {
+        type: encType,
+        email: userEmail
+      };
+
+      console.log('You will make a server request with the body: ', postBody);
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:8080/createKey',
+        contentType: 'application/json',
+        data: JSON.stringify(postBody),
+      });
+
+      showMessage();
+    });
+
+    function showMessage() {
+      $('#main-form').hide();
+      $('#form-main-message').text(
+        "We'll send you a mail when your keys are ready!"
+      );
+    }
+  </script>
+</html>

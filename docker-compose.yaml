@@ -46,5 +46,16 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile-email
+
+  client:
+    links:
+      - rabbitmq
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-client
+    ports:
+      # Endpoint
+      - '8081:80'
         
     
