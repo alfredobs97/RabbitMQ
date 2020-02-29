@@ -71,13 +71,12 @@
 
       console.log('You will make a server request with the body: ', postBody);
 
-      $.post(
-        'http://localhost:3000/createKey',
-        JSON.stringify(postBody),
-        function(data, status) {
-          console.log(`${data} and status is ${status}`);
-        }
-      );
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/createKey',
+        contentType: 'application/json',
+        data: JSON.stringify(postBody),
+      });
 
       showMessage();
     });
