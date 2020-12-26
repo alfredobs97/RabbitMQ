@@ -1,12 +1,10 @@
 const amqp = require('amqplib/callback_api');
-const queueEmail = 'email';
-const queueKey = 'key';
-const queueKeyBack = 'keyBack';
+const config = require('./config');
 
 module.exports = {
   start: start,
   sendKey: sendKey,
-  sendEmail: sendEmail
+  sendEmail: sendEmail,
 };
 
 async function start() {
@@ -14,16 +12,16 @@ async function start() {
   const channel = await createChannel(server);
 
   // crear las colas al arrancar porque si no va a petar cuando empiecen a escuchar por estas colas
-  channel.assertQueue(queueKeyBack, {
-    durable: true
+  channel.assertQueue(config.QUEUE_KEY_BACK, {
+    durable: true,
   });
 
-  channel.assertQueue(queueKey, {
-    durable: true
+  channel.assertQueue(config.QUEUE_KEY, {
+    durable: true,
   });
 
-  channel.assertQueue(queueEmail, {
-    durable: true
+  channel.assertQueue(config.QUEUE_EMAIL, {
+    durable: true,
   });
 
   return channel;
@@ -31,7 +29,7 @@ async function start() {
 
 function createConnection(connectionString) {
   return new Promise((resolve, reject) => {
-    amqp.connect(connectionString, function(error0, connection) {
+    amqp.connect(connectionString, function (error0, connection) {
       if (error0) reject(error0);
       resolve(connection);
     });
@@ -40,7 +38,7 @@ function createConnection(connectionString) {
 
 function createChannel(connection) {
   return new Promise((resolve, reject) => {
-    connection.createChannel(function(error1, channel) {
+    connection.createChannel(function (error1, channel) {
       if (error1) reject(error1);
       resolve(channel);
     });
@@ -48,12 +46,15 @@ function createChannel(connection) {
 }
 
 function sendKey(channel, keyData) {
-  return channel.sendToQueue(queueKey, Buffer.from(JSON.stringify(keyData)));
+  return channel.sendToQueue(
+    config.QUEUE_KEY,
+    Buffer.from(JSON.stringify(keyData))
+  );
 }
 
 function sendEmail(channel, emailData) {
   return channel.sendToQueue(
-    queueEmail,
+    config.QUEUE_EMAIL,
     Buffer.from(JSON.stringify(emailData))
   );
 }

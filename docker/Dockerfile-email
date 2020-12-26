@@ -11,5 +11,10 @@ RUN npm install
 COPY ./src/generateEmail.js .
 COPY ./src/rabbit.js .
 COPY ./src/config.js .
+COPY ./docker/start.sh .
+COPY ./wait-for-it.sh .
+RUN ["chmod", "+x", "start.sh"]
+RUN ["chmod", "+x", "wait-for-it.sh"]
 
-CMD [ "node", "generateEmail.js" ]
+
+CMD [ "./start.sh" ]

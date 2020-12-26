@@ -1,5 +1,4 @@
 const rabbit = require('./rabbit');
-const queueEmail = 'email';
 const nodemailer = require('nodemailer');
 const config = require('./config');
 
@@ -7,8 +6,8 @@ const transporter = nodemailer.createTransport({
   service: config.SERVICE,
   auth: {
     user: config.EMAIL,
-    pass: config.PASS
-  }
+    pass: config.PASS,
+  },
 });
 
 function generateEmail(userPreferences) {
@@ -21,13 +20,13 @@ function generateEmail(userPreferences) {
     attachments: [
       {
         filename: 'publicKey.pem',
-        content: Buffer.from(userPreferences.public, 'utf-8')
+        content: Buffer.from(userPreferences.public, 'utf-8'),
       },
       {
         filename: 'privateKey.pem',
-        content: Buffer.from(userPreferences.private, 'utf-8')
-      }
-    ]
+        content: Buffer.from(userPreferences.private, 'utf-8'),
+      },
+    ],
   };
 
   return new Promise((resolve, reject) => {
@@ -40,17 +39,19 @@ function generateEmail(userPreferences) {
 
 rabbit
   .start()
-  .then(channel => {
+  .then((channel) => {
     console.log('Connected');
-    
-    channel.consume(queueEmail, async msg => {
-      const keyAndEmail = JSON.parse(msg.content);
-      const responseMailServer = await generateEmail(keyAndEmail);
 
+    channel.consume(config.QUEUE_EMAIL, async (msg) => {
+      const keyAndEmail = JSON.parse(msg.content);
+      console.log('sending email');
+      console.log(keyAndEmail);
+      const responseMailServer = await generateEmail(keyAndEmail);
+      console.log(responseMailServer);
       //confirma que se ha enviado el correo y lo elimina de la cola
 
       channel.ack(msg);
       console.log('Respuesta del servidor de correo: ' + responseMailServer);
     });
   })
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
