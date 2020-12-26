@@ -4,12 +4,18 @@ FROM node:12-alpine
 WORKDIR /usr/src/app
 
 COPY ./src/package*.json ./
+COPY ./wait-for-it.sh .
 
 RUN npm install 
 
 # Bundle app source
 COPY ./src/server.js .
 COPY ./src/rabbit.js .
+COPY ./docker/start.sh .
+COPY ./src/config.js .
+
+RUN ["chmod", "+x", "start.sh"]
+RUN ["chmod", "+x", "wait-for-it.sh"]
 
 EXPOSE 8080
-CMD [ "node", "server.js" ]
+CMD [ "./start.sh" ]

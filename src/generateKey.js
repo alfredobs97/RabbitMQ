@@ -1,6 +1,6 @@
 const { generateKeyPair } = require('crypto');
 const rabbit = require('./rabbit');
-const queueKey = 'key';
+const config = require('./config');
 
 function generateKey(type) {
   return new Promise((resolve, reject) => {
@@ -10,21 +10,21 @@ function generateKey(type) {
         modulusLength: 8192,
         publicKeyEncoding: {
           type: 'spki',
-          format: 'pem'
+          format: 'pem',
         },
         privateKeyEncoding: {
           type: 'pkcs8',
           format: 'pem',
           cipher: 'aes-256-cbc',
-          passphrase: ''
-        }
+          passphrase: '',
+        },
       },
       (err, publicKey, privateKey) => {
         if (err) return reject(err);
 
         const keys = {
           public: publicKey,
-          private: privateKey
+          private: privateKey,
         };
 
         return resolve(keys);
@@ -35,10 +35,10 @@ function generateKey(type) {
 
 rabbit
   .start()
-  .then(channel => {
+  .then((channel) => {
     console.log('Connected');
 
-    channel.consume(queueKey, async msg => {
+    channel.consume(config.QUEUE_KEY, async (msg) => {
       const configurationKey = JSON.parse(msg.content);
       const keys = await generateKey(configurationKey.type);
 
@@ -51,4 +51,4 @@ rabbit
       console.log('Llaves generadas y notificado para su envío');
     });
   })
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
