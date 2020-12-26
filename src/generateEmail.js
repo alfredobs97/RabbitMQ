@@ -1,8 +1,7 @@
 const rabbit = require('./rabbit');
 const nodemailer = require('nodemailer');
 const config = require('./config');
-console.log('config: ');
-console.log(config);
+
 const transporter = nodemailer.createTransport({
   service: config.SERVICE,
   auth: {
@@ -31,7 +30,6 @@ function generateEmail(userPreferences) {
   };
 
   return new Promise((resolve, reject) => {
-    console.log('creating email promise');
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) return reject(error);
       return resolve(info.response);
